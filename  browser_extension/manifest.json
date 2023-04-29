@@ -1,0 +1,14 @@
+{
+    "name": "Criminal Monitoring",
+    "description": "Анализ негативного содержания веб-ресурсов",
+    "version": "1.0",
+    "manifest_version": 3,
+    "icons": {
+        "128":"./images/icon_128.png"
+    },
+    "action": {
+        "default_popup":"analysis.html"
+    },
+    "permissions": ["scripting", "activeTab"],
+    "background":{}
+}

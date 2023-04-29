@@ -1,0 +1,3 @@
+matplotlib
+tensorflow_datasets
+pathlib
