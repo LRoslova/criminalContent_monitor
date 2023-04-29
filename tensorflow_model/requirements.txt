@@ -1,4 +1,5 @@
-matplotlib
-tensorflow-text
-tf-models-official
-tensorflow_hub
+num2words
+transformers
+nltk
+tensorflow_addons
+tensorflow
