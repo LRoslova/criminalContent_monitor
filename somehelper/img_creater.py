@@ -67,7 +67,7 @@ def persist_image(folder_path:str,url:str):
     except Exception as e:
         print(f"ERROR — Could not save {url} — {e}")
 
-def search_and_download(search_term:str, target_path='./images', number_images=400):
+def search_and_download(search_term:str, target_path='./images', number_images=500):
     target_folder = os.path.join(target_path,'_'.join(search_term.lower().split(' ')))
     if not os.path.exists(target_folder):
         os.makedirs(target_folder)
@@ -76,10 +76,12 @@ def search_and_download(search_term:str, target_path='./images', number_images=4
         for elem in res:
             persist_image(target_folder,elem)
 
-search_and_download(search_term="фото")
-search_and_download(search_term="фото")
-search_and_download(search_term="фото")
-search_and_download(search_term="фото")
+search_and_download(search_term="оружие")
+search_and_download(search_term="пистолет")
+search_and_download(search_term="автомат")
+search_and_download(search_term="перочинный нож")
+search_and_download(search_term="граната")
+search_and_download(search_term="ружье")
 
 
 
