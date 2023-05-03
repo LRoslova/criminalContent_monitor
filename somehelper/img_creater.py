@@ -76,12 +76,33 @@ def search_and_download(search_term:str, target_path='./images', number_images=5
         for elem in res:
             persist_image(target_folder,elem)
 
-search_and_download(search_term="оружие")
-search_and_download(search_term="пистолет")
-search_and_download(search_term="автомат")
-search_and_download(search_term="перочинный нож")
-search_and_download(search_term="граната")
-search_and_download(search_term="ружье")
+# search_and_download(search_term="девушка")
+# search_and_download(search_term="мужчина")
+
+# search_and_download(search_term="машина")
+# search_and_download(search_term="домашнее животное")
+
+# search_and_download(search_term="корабль")
+# search_and_download(search_term="одежда")
+
+# search_and_download(search_term="фрукт")
+# search_and_download(search_term="овощ")
+
+# search_and_download(search_term="лес")
+# search_and_download(search_term="озеро")
+
+# search_and_download(search_term="сок")
+# search_and_download(search_term="птицы")
+
+# search_and_download(search_term="посуда")
+# search_and_download(search_term="дом")
+
+# search_and_download(search_term="самолет")
+search_and_download(search_term="документы")
+
+search_and_download(search_term="бытовая техника")
+search_and_download(search_term="рыба")
+
 
 
 

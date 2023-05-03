@@ -10,8 +10,8 @@ from tensorflow.keras.models import Sequential
 
 
 import pathlib
-dataset_url2 = "https://vk.com/doc193464385_661088124?hash=K1cSG8Amb64pKKvlsZUSlNxOCpzBQq5KyMMjSh9NhAP&dl=gW3E15a3cPOiXwGSqHjXSto8JYIu4VrBpJVauEzvtuL"
-data_dir = tf.keras.utils.get_file('images', origin=dataset_url2, untar=True)
+dataset_url = "https://vk.com/doc193464385_661080507?hash=EiZtWrH7zqbO84zlsWP5XvXZSrLANwnGYQDGA4dyOnw&dl=z4aa4AwvIJhM5rjcZG6t4qjkDTNlZpFLpu7ZShm6Hi8"
+data_dir = tf.keras.utils.get_file('images', origin=dataset_url, untar=True)
 data_dir = pathlib.Path(data_dir)
 # cache_dir = os.path.join(os.path.expanduser('~'), '.keras')
 # print(os.listdir(cache_dir))
@@ -94,14 +94,20 @@ data_augmentation = keras.Sequential(
 model = Sequential([
   data_augmentation,
   layers.Rescaling(1./255),
-  layers.Conv2D(16, 3, padding='same', activation='relu'),
-  layers.MaxPooling2D(),
+  layers.Conv2D(32, 3, padding='same', activation='relu'),
   layers.Conv2D(32, 3, padding='same', activation='relu'),
   layers.MaxPooling2D(),
+  layers.Dropout(0.2),
   layers.Conv2D(64, 3, padding='same', activation='relu'),
+  layers.Conv2D(64, 3, padding='same', activation='relu'),
+  layers.Dropout(0.2),
+  layers.MaxPooling2D(),
+  layers.Conv2D(128, 3, padding='same', activation='relu'),
+  layers.Conv2D(128, 3, padding='same', activation='relu'),
   layers.MaxPooling2D(),
   layers.Dropout(0.2),
   layers.Flatten(),
+  layers.Dropout(0.2),
   layers.Dense(128, activation='relu'),
   layers.Dense(num_classes)
 ])
