@@ -1,5 +1,0 @@
-num2words
-transformers
-nltk
-tensorflow_addons
-tensorflow

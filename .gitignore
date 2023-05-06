@@ -2,3 +2,5 @@ somehelper/database
 somehelper/text
 somehelper/images
 server/node_modules
+chrome-extension/node_modules
+chrome-extension/.parcel-cache

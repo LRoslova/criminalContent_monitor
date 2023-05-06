@@ -3,7 +3,6 @@ const tf = require('@tensorflow/tfjs');
 // подключение express
 const express = require("express");
 const bodyParser = require('body-parser');
-canvas = require('canvas')
 
 
 // создаем объект приложения
@@ -26,10 +25,10 @@ const MIN_IMG_SIZE = 128;
 
 
 app.use(bodyParser.json() );
+app.use(express.static(__dirname + "/models"));
 app.use(bodyParser.urlencoded({ extended: true })); 
 var cors = require('cors')
 app.use(cors()) // Use this after the variable declaration
-const model = tf.loadLayersModel('/models/5category_180MNV2/model.json');
 
 
 
