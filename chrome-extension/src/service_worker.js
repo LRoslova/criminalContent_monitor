@@ -79,7 +79,7 @@ class ImageClassifier {
     console.log('Loading model...');
     const startTime = performance.now();
     try {
-      this.model = await tf.loadLayersModel('http://localhost:3000//5category_180MNV2_2/model.json');
+      this.model = await tf.loadLayersModel('http://localhost:3000//5category_ENV2M/model.json');
       // Warms up the model by causing intermediate tensor values
       // to be built and pushed to GPU.
       tf.tidy(() => {
