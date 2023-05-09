@@ -51,7 +51,7 @@ function textContentFromPrediction(predictions) {
   // Confident.
   if (predictions.percent) {
     console.log("tyt3");
-    return `${class_names[predictions.index]} with ${(predictions.percent*100).toFixed(1)}!`;
+    return `${class_names[predictions.index]} на ${(predictions.percent*100).toFixed(1)}%!`;
   }
   // // Not Confident.
   // if (predictions[0].probability >= LOW_CONFIDENCE_THRESHOLD &&
@@ -181,6 +181,7 @@ function loadImageAndSendDataBack(src, sendResponse) {
   const img = new Image();
   img.crossOrigin = 'anonymous';
   img.onerror = function(e) {
+    alert("Не удалось загрузить изображение.")
     console.warn(`Could not load image from external source ${src}.`);
     sendResponse({rawImageData: undefined});
     return;
@@ -203,10 +204,12 @@ function loadImageAndSendDataBack(src, sendResponse) {
       });
       return;
     }
+    alert("Изображение слишком маленькое для анализа.")
     // Fail out if either dimension is less than MIN_IMG_SIZE.
     console.warn(`Image size too small. [${img.height} x ${
         img.width}] vs. minimum [${MIN_IMG_SIZE} x ${MIN_IMG_SIZE}]`);
     sendResponse({rawImageData: undefined});
+    
   };
   img.src = src;
 }
