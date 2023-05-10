@@ -8,51 +8,69 @@ const bodyParser = require('body-parser');
 // создаем объект приложения
 const app = express();
 const port = 3000;
-let class_names = {
-    0: "alcohol",
-    1: "drugs",
-    2: "ordinary",
-    3: "porn",
-    4: "weapon"
-}
-let img_height = 180
-let img_width = 180
+
 const IMAGE_SIZE = 180;
 
-// The minimum image size to consider classifying.  Below this limit the
-// extension will refuse to classify the image.
-const MIN_IMG_SIZE = 128;
 
-
-app.use(bodyParser.json() );
+app.use(bodyParser.json({limit: "50mb"}));
+app.use(bodyParser.urlencoded({limit: "50mb", extended: true, parameterLimit:50000}));
 app.use(express.static(__dirname + "/models"));
 app.use(bodyParser.urlencoded({ extended: true })); 
 var cors = require('cors')
 app.use(cors()) // Use this after the variable declaration
 
+let example;
+let model_tf;
 
-
-// определяем обработчик для маршрута "/"
 app.get("/", function(request, response){
     
     response.send({msg: "rabotaet!"});
 });
+app.post("/parse_img", function(request, response){
+    let tmp = request.body
+    tmp = Uint8ClampedArray.from(tmp)
+    console.log(tmp);
+    const numChannels = 3;
+    const numPixels = 180 * 180;
+    const values = new Int32Array(numPixels * numChannels);
 
-app.post("/", function(request, response){
-    console.log(request.body.data);
-    // let src = request.body.data[0].result[0]
-    let src = 'https://s15.stc.all.kpcdn.net/family/wp-content/uploads/2023/02/top-v-luchshie-porody-krupnykh-sobak-960x540-1-560x420.jpg'
-    console.log(src);
-
+    for (let i = 0; i < numPixels; i++) {
+     for (let channel = 0; channel < numChannels; ++channel) {
+        values[i * numChannels + channel] = tmp[i * 4 + channel];
+     }
+    }
+    example = tf.tensor3d(values, [180,180,3])
     
-
-    
-
-
-
-
-    response.send({msg: "rabotaet!"});
+    // example = tmp
+    response.send({data: "картинка обработана!"});
 });
+
+app.get("/predict", function(request, response){
+    async function classificImg(){
+        let tmp = await imageClassifier.analyzeImage(example)
+        // answer = {percent: tmp.percent, index: tmp.index}
+        console.log(tmp);
+        response.send(tmp);
+    }
+    
+    classificImg()
+    
+});
+
+app.get("/initModel", function(request, response){
+    let answer;
+    const model = imageClassifier.loadModel();
+    if(!model){
+        answer = {code: false}
+        
+    }else{
+        model_tf = model
+        answer = {code: true}
+    }
+    response.send(answer);
+});
+
+
 
 // начинаем прослушивать подключения на 3000 порту
 // app.listen(3000);
@@ -61,3 +79,45 @@ app.listen(port, () => {
   });
 
 
+
+
+
+  class ImageClassifier {
+    constructor() {
+      this.loadModel();
+    }
+  
+    async loadModel() {
+      try {
+        this.model = await tf.loadLayersModel('http://localhost:3000//5category_ENV2M/model.json');
+        // Warms up the model by causing intermediate tensor values
+        // to be built and pushed to GPU.
+        tf.tidy(() => {
+          this.model.predict(tf.zeros([1, IMAGE_SIZE, IMAGE_SIZE, 3]));
+        });
+        return true
+      } catch (e) {
+        return false
+        console.error('Unable to load model', e);
+      }
+    }
+  
+    async analyzeImage(img) {
+      let data2= await this.model.predict(img.reshape([1,180,180,3]))
+      let data3
+      data2= await tf.softmax(data2).data().then(data=>{
+        data3 = data
+      })
+      console.log(data3);
+      let arr = [];
+      for (let i=0; i < data3.length; i++) arr[i] = (data3[i]*100)/100;
+      console.log(arr);
+      let maxIndex = await arr.indexOf(Math.max.apply(null, arr));
+      let percent = Math.max.apply(null, arr);
+
+      let predictions = {index: maxIndex, percent: percent}
+      return predictions
+    }
+  }
+  
+  const imageClassifier = new ImageClassifier();
